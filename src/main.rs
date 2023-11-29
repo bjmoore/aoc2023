@@ -42,7 +42,7 @@ struct Cli {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
-    init()?;
+    init(&cli.year.unwrap())?;
 
     if let Some(day) = cli.day {
         output_result(day, solve(day));
@@ -83,7 +83,7 @@ fn solve(day: u8) -> Result<(String, String), Box<dyn Error>> {
     }
 }
 
-fn init() -> Result<(), Box<dyn Error>> {
+fn init(year: &str) -> Result<(), Box<dyn Error>> {
     let home_path = std::env::var("USERPROFILE")?;
     let aoc_dir = format!("{home_path}/.aoc");
     if !std::path::Path::new(&aoc_dir).is_dir() {
@@ -99,16 +99,17 @@ fn init() -> Result<(), Box<dyn Error>> {
     let mut session_token = String::new();
     session_file.read_to_string(&mut session_token)?;
 
-    let input_1_response = ureq::get("https://adventofcode.com/2022/day/1/input")
-        .set("Cookie", &session_token)
-        .call()?;
+    fs::create_dir_all(format!("{aoc_dir}/{year}"))?;
 
-    fs::create_dir_all(format!("{aoc_dir}/2022"))?;
+    for i in 1..=25 {
+        let input_file_path = format!("{aoc_dir}/{year}/input{i}");
+        if !std::path::Path::new(&input_file_path).is_file() {
+            let input_url = format!("https://adventofcode.com/{year}/day/{i}/input");
+            let input_response = ureq::get(&input_url).set("Cookie", &session_token).call()?;
 
-    fs::write(
-        format!("{aoc_dir}/2022/input1"),
-        input_1_response.into_string()?,
-    )?;
+            fs::write(input_file_path, input_response.into_string()?)?;
+        }
+    }
 
     Ok(())
 }
