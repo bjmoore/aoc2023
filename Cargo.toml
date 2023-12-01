@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 ureq = "2.8.0"
 clap = { version = "4.0.32", features = ["derive"] }
+chrono = "0.4.31"

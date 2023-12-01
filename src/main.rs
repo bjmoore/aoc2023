@@ -1,3 +1,4 @@
+use chrono::prelude::*;
 use clap::Parser;
 use std::error::Error;
 use std::fs;
@@ -36,13 +37,13 @@ struct Cli {
     #[arg(short, long)]
     day: Option<u8>,
 
-    #[arg(short, long)]
-    year: Option<String>,
+    #[arg(short, long, default_value = "2023")]
+    year: String,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
-    init(&cli.year.unwrap())?;
+    init(&cli.year)?;
 
     if let Some(day) = cli.day {
         output_result(day, solve(day));
@@ -75,7 +76,9 @@ fn read_input(path: PathBuf) -> Result<Vec<String>, std::io::Error> {
 }
 
 fn solve(day: u8) -> Result<(String, String), Box<dyn Error>> {
-    let input = read_input(PathBuf::from(format!("input-{day}.txt")))?;
+    let home_path = std::env::var("USERPROFILE")?;
+    let aoc_dir = format!("{home_path}/.aoc");
+    let input = read_input(PathBuf::from(format!("{aoc_dir}/2023/input{day}")))?;
 
     match day {
         1 => day01::solve(input),
@@ -99,9 +102,14 @@ fn init(year: &str) -> Result<(), Box<dyn Error>> {
     let mut session_token = String::new();
     session_file.read_to_string(&mut session_token)?;
 
+    let eastern_standard_time = FixedOffset::west_opt(5 * 3600).unwrap();
+    let current_time = Utc::now().with_timezone(&eastern_standard_time);
+    let aocs_released = current_time.day(); // haha
+    println!("Current day: {aocs_released}");
+
     fs::create_dir_all(format!("{aoc_dir}/{year}"))?;
 
-    for i in 1..=25 {
+    for i in 1..=aocs_released {
         let input_file_path = format!("{aoc_dir}/{year}/input{i}");
         if !std::path::Path::new(&input_file_path).is_file() {
             let input_url = format!("https://adventofcode.com/{year}/day/{i}/input");
