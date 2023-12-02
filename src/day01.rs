@@ -200,12 +200,8 @@ impl StateMachine {
 }
 
 pub fn solve(input: Vec<String>) -> Result<(String, String), Box<dyn Error>> {
-    let words = vec![
-        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-    ];
     let mut part1 = 0;
     let mut part2 = 0;
-    let mut linect = 1;
 
     for line in input {
         let mut first_digit_one = 0;
@@ -306,7 +302,6 @@ pub fn solve(input: Vec<String>) -> Result<(String, String), Box<dyn Error>> {
 
         part1 += first_digit_one * 10 + last_digit_one;
         part2 += first_digit_two * 10 + last_digit_two;
-        linect += 1;
     }
     Ok((part1.to_string(), part2.to_string()))
 }
