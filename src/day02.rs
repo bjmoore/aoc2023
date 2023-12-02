@@ -1,7 +1,6 @@
 use std::error::Error;
 
 pub fn solve(input: Vec<String>) -> Result<(String, String), Box<dyn Error>> {
-    let mut part1 = 0;
     let mut part2 = 0;
     let mut possible_games: [bool; 100] = [true; 100];
 
@@ -45,7 +44,7 @@ pub fn solve(input: Vec<String>) -> Result<(String, String), Box<dyn Error>> {
         part2 += min_rgb[0] * min_rgb[1] * min_rgb[2];
     }
 
-    part1 = possible_games
+    let part1: usize = possible_games
         .iter()
         .enumerate()
         .filter(|(_, &b)| b)
