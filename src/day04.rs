@@ -29,7 +29,6 @@ pub fn solve(input: Vec<String>) -> Result<(String, String), Box<dyn Error>> {
                 card_counts[i] += current_multiplier;
             }
         }
-        println!("{} {} {}", card_index, card_counts[card_index], matches);
     }
 
     let part2: u32 = card_counts.iter().sum();
