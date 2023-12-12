@@ -87,6 +87,10 @@ fn solve(day: u8) -> Result<(String, String), Box<dyn Error>> {
         4 => day04::solve(input),
         5 => day05::solve(input),
         6 => day06::solve(input),
+        7 => day07::solve(input),
+        8 => day08::solve(input),
+        10 => day10::solve(input),
+        11 => day11::solve(input),
         _ => Err(Box::from(format!("Day {day} not implemented"))),
     }
 }
