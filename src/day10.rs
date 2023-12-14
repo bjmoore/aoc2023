@@ -30,6 +30,9 @@ pub fn solve(input: Vec<String>) -> Result<(String, String), Box<dyn Error>> {
         }
     }
 
+    let mut walker: [usize; 2] = [0, 0];
+    let mut direction = false;
+
     // 3rd element is current direction- N E W S
     let mut walkers: Vec<(usize, usize, u8)> = Vec::new();
 
